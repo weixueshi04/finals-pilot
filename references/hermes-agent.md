@@ -1,6 +1,6 @@
 # Hermes Agent Operating Notes
 
-Use this reference when Qimo Speedrun runs inside Hermes Agent or another agent that can persist files, create scheduled tasks, and send messages through QQ, WeChat, or another message gateway.
+Use this reference when University Finals Sprint runs inside Hermes Agent or another agent that can persist files, create scheduled tasks, and send messages through QQ, WeChat, or another message gateway.
 
 ## Operating Model
 

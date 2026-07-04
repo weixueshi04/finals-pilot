@@ -1,9 +1,9 @@
 ---
-name: qimo-speedrun
-description: Build a 10-12 hour university finals speedrun workflow from messy course materials. Use when a student needs an evidence-backed cram plan from PPTs, textbooks, review recordings/transcripts, homework, past exams, figures, and notes; the skill enforces source coverage, original-source verification, original courseware review, teacher-priority evidence, staged mock exams, active coaching, mistake review, recitation, final sprint sheets, correction-incident review, and scheduled follow-up tasks. Designed for installed/file-based agents such as Hermes, Codex, Claude Code, and OpenCode, especially Hermes-style agents with cron/message gateways.
+name: university-finals-sprint
+description: Build a 10-12 hour university finals sprint workflow from messy course materials. Use when a student needs an evidence-backed cram plan from PPTs, textbooks, review recordings/transcripts, homework, past exams, figures, and notes; University Finals Sprint enforces source coverage, tool readiness and auto-install, original-source verification, original courseware review, teacher-priority evidence, staged mock exams, active coaching, mistake review, recitation, final sprint sheets, correction-incident review, and scheduled follow-up tasks. Designed for installed/file-based agents such as Hermes, Codex, Claude Code, and OpenCode, especially Hermes-style agents with cron/message gateways.
 ---
 
-# Qimo Speedrun (v0.2.0)
+# University Finals Sprint (v0.2.1)
 
 Use this skill to turn messy course materials into a compact, evidence-backed finals review path. The practical goal is 60+ as the floor and around 80 as the stretch target after 10-12 focused hours, assuming the materials contain enough exam signal.
 
@@ -13,7 +13,7 @@ When this skill is activated (loaded via `use_skill`), the assistant MUST immedi
 
 The guide must include:
 
-1. **Greeting + version**: State the skill name and version (e.g., "Qimo Speedrun v0.2.0 已激活").
+1. **Greeting + version**: State the skill name and version (e.g., "University Finals Sprint v0.2.1 已激活").
 2. **What this skill does** (1-2 sentences): Turn your course materials into a structured 10-12 hour finals review path.
 3. **What the student needs to provide**: Course materials (PPT, textbook, recordings, homework, past exams, review notes) — can be unsorted, dumped into one folder or knowledge base.
 4. **The full workflow as a numbered checklist** the student can follow, in plain language:
@@ -49,7 +49,7 @@ Do NOT begin processing materials until the user confirms they want to start. Th
 - **Knowledge-base discipline (知识库只作检索，不作已读证明)**: When using Tencent ima, Kimi, Tongyi Tingwu, or any knowledge-base/transcription product, treat retrieval as secondary until the original source location is visible. Maintain batch manifests and retrieval receipts. Read `references/knowledge-base-platforms.md` before relying on a knowledge base for analysis or correction.
 - **Subject/entity relationship clarity (主体/对象/变量/关系不可模糊)**: For any user question about a concept, case, term, event, mechanism, formula, theorem, experiment, policy, literary text, or historical process, identify the relevant subjects/entities and their relationships before explaining. In law/management this means party-action-responsibility; in engineering/science it means object-variable-condition-mechanism; in economics/management it means actor-incentive-constraint-outcome; in humanities/social science it means person/institution/concept/event-cause-effect. The answer must move the student from vague confusion to a clear mental model.
 - **Special-case explicit treatment (特殊情况特殊解释)**: Many exam questions involve situations where a general rule, formula, model, theory, or historical pattern has an exception, boundary condition, special assumption, or modified application. When this happens, explicitly separate: (1) the general rule/model, (2) what is special in THIS question, (3) what the course material says about that specialness, (4) how the conclusion changes. Never apply a general rule to a special case without flagging the specialness.
-- **Discipline adaptation (按学科适配解释方式)**: Qimo Speedrun is not limited to construction, contract management, law, or any single course. Determine the subject and exam style from the user's materials. For STEM and quantitative courses, prioritize definitions, variables, assumptions, formulas, diagrams, units, procedures, and calculation traps. For humanities and social sciences, prioritize actors, concepts, texts, institutions, causes, evidence, comparison, argument structure, and exam-language expression. Use the course's own style, not a fixed template from another subject.
+- **Discipline adaptation (按学科适配解释方式)**: University Finals Sprint is not limited to construction, contract management, law, or any single course. Determine the subject and exam style from the user's materials. For STEM and quantitative courses, prioritize definitions, variables, assumptions, formulas, diagrams, units, procedures, and calculation traps. For humanities and social sciences, prioritize actors, concepts, texts, institutions, causes, evidence, comparison, argument structure, and exam-language expression. Use the course's own style, not a fixed template from another subject.
 - **Correction incidents create memory (答错必须留痕进化)**: When the user challenges an answer or a source mismatch appears, do not only apologize. Re-check the original source, classify the incident, correct affected artifacts, and write a prevention rule. Read `references/evolution-and-incident-review.md` for the required template.
 - **Autonomous evolution with user control (自主进化但不擅自改核心规则)**: Within a course run, adapt drills, reminders, difficulty, recitation, and mock exams from mistakes and replies. Across course runs, propose skill improvements in `logs/skill_improvement_candidates.md`. Do not modify the canonical skill during an active exam run unless the user explicitly asks.
 - Preserve source traceability. Assign every knowledge point an ID and cite source file/page/slide/timestamp/homework question when available.
@@ -61,7 +61,7 @@ Do NOT begin processing materials until the user confirms they want to start. Th
 - Match the real exam format first. If the user provides question types, marks, duration, open/closed-book rules, or scope, follow those over generic defaults.
 - For recent or externally variable course/exam conventions, use web search only when available and useful, and cite sources. Never let internet material override the teacher's materials.
 - If the student is sleep-deprived, protect the memory window: include a sleep block and a small morning retrieval review rather than endless new content.
-- Run a capability check before reading materials. If the current assistant cannot actually inspect an image, PDF, PPT, DOCX, audio file, web page, or local file, say so explicitly and use the fallback path. Never claim to have read a source that the available tools cannot access.
+- Run the Tool Readiness and Auto-Install Gate before reading materials. Identify which file types require PDF/PPT/DOCX/OCR/audio/web/filesystem tooling, tell the student what needs to be installed or enabled and why, then install or enable the missing tools automatically when the current agent/platform permits it. If approval, network, package manager, or sandbox limits block installation, request the minimum required permission once; if installation still cannot happen, mark the source unreadable and use the fallback path. Never claim to have read a source that the available tools cannot access.
 - Support Auto Intake: if the user drops all materials for a course into one folder, classify and route files automatically before analysis. Do not require the student to manually sort files.
 - Support Chart Agent Protocol for engineering and quantitative courses: extract chart/table/diagram evidence, map figures to knowledge points, and generate reproducible chart assets for exam questions when tools allow.
 - Extract courseware example questions: When PPT slides, lecture notes, or other courseware contain in-class practice questions (choice, short-answer, case analysis, calculation), extract ALL of them into a dedicated question bank. Do not cherry-pick; completeness is the point. Each question must include the full stem, all options, the correct answer, a detailed explanation, and a source trace (file name + slide/section/page number).
@@ -74,6 +74,43 @@ Do NOT begin processing materials until the user confirms they want to start. Th
 These gates are mandatory because agents and knowledge-base platforms can skip files, lose state, overfit old papers, or keep repeating the same answer mistakes.
 
 This skill is intended for installed or file-based agents. Do not add workflow burden for users who paste the skill into ordinary web AI without installation, file access, or persistent state. A Hermes message gateway is part of an installed agent workflow and is supported.
+
+### Tool Readiness and Auto-Install Gate
+
+Before source synthesis, create or update `logs/tool_readiness.md`. The agent must inspect the provided file list, infer the material types, map each type to the required reading capability, and install or enable missing tools when the platform allows it.
+
+Required readiness log fields:
+
+| Field | Required content |
+|---|---|
+| Material type | PDF, PPT/PPTX, DOCX, image/homework photo, audio/video, spreadsheet, archive, web page, local folder, other |
+| Needed capability | PDF text extraction, slide extraction, document parsing, OCR/vision, transcription, spreadsheet parsing, archive extraction, browser/search, filesystem write |
+| Current status | available, missing, installable, needs approval, blocked, user-provided export needed |
+| Proposed tool | built-in parser, workspace dependency, agent plugin, OCR/transcription tool, package/library, or manual export fallback |
+| Why needed | the source tier or file type that would be unreadable without it |
+| Install action/result | installed/enabled, smoke-tested, failed, skipped by user, unavailable |
+| Remaining risk | unreadable pages/slides/images/audio, weak OCR, no timestamps, low-confidence extraction |
+
+Student-facing message before installation:
+
+```markdown
+Tool readiness:
+- Materials found: <counts by type>
+- Missing capability: <capability>
+- Tool to install/enable: <tool or plugin>
+- Why: <which source would otherwise be unreadable>
+- Action: installing/enabling now / requesting platform approval / blocked
+```
+
+Auto-install rules:
+
+- Prefer existing built-in tools, bundled workspace dependencies, and agent-native plugins before adding new packages.
+- If a package manager, network request, plugin install, or filesystem permission requires approval, ask for the minimum required approval with a concise reason, then proceed after approval.
+- Install into the project workspace, agent cache, virtual environment, or user-approved tool location when possible. Avoid global/system-wide installation unless the agent platform requires it and the user approves.
+- After installing or enabling a tool, run a small extraction smoke test on one representative file type before marking the capability as available.
+- Do not silently install unknown, untrusted, unrelated, or paid tools. Do not install tools only for convenience when a reliable built-in capability already exists.
+- If installation fails, mark the affected sources as unreadable or partial in `logs/source_coverage.md`, explain the missing capability, and ask the student for a text export/transcript/clearer image, an explicit skip, or permission to continue at lower confidence.
+- Read `references/tool-readiness.md` when choosing tools for PDF, PPT/PPTX, DOCX, images, audio, spreadsheets, archives, web pages, or local folders.
 
 ### Source Coverage Gate
 
@@ -454,23 +491,25 @@ Reject:
 
 ## Capability Check
 
-Before processing course materials, list available and missing capabilities:
+Before processing course materials, list available and missing capabilities, then install or enable missing tools when possible:
 
 | Material / Need | Capability to check | If missing |
 |---|---|---|
-| Homework photos or screenshots | image understanding, OCR, or vision plugin | Ask the user to install/enable OCR or vision tools, upload clearer images to a vision-capable agent, or transcribe the relevant questions. Mark unverified image content as unavailable. |
-| PDF textbooks or handouts | PDF text extraction or document parser | Ask the user to provide extracted text, copy key pages, export PDF to text, or install/enable a PDF/document tool. Do not infer unseen PDF content. |
-| PPT/PPTX slides | slide parser or document tool | Ask for exported PDF/images/text, or install/enable a document parser. |
-| DOCX notes | DOCX parser or document tool | Ask for pasted text/exported PDF, or install/enable a document parser. |
-| Review recordings or other audio | transcript or audio transcription tool | Ask for transcript, key timestamps, or install/enable transcription. Review recordings are S1 sources; do not treat raw audio as read, and do not let lower-tier sources replace them. |
-| Web exam conventions | web search/browser | Skip web-informed trends or ask the user to provide links/text. |
-| Persistent artifacts | filesystem write access | Treat this as blocked for official Qimo Speedrun. Ask the user to switch to an installed/file-based agent or explicitly accept a non-supported manual run. |
+| Homework photos or screenshots | image understanding, OCR, or vision plugin | Tell the student OCR/vision is needed for image homework, then install/enable a vision/OCR tool if the platform permits. If blocked, ask for clearer images, text transcription, explicit skip, or lower-confidence continuation. |
+| PDF textbooks or handouts | PDF text extraction or document parser | Tell the student PDF extraction is needed, then install/enable a PDF/document tool if possible. If blocked, ask for extracted text or key pages. Do not infer unseen PDF content. |
+| PPT/PPTX slides | slide parser, Office/LibreOffice export, or document tool | Tell the student slide extraction is needed, then install/enable a slide/document parser if possible. If blocked, ask for exported PDF/images/text. |
+| DOCX notes | DOCX parser or document tool | Tell the student DOCX parsing is needed, then install/enable a DOCX/document parser if possible. If blocked, ask for pasted text or exported PDF. |
+| Review recordings or other audio | transcript or audio transcription tool | Tell the student transcription is needed because review recordings are S1 sources, then install/enable transcription if possible. If blocked, ask for transcript or key timestamps. Do not let lower-tier sources replace unread teacher review audio. |
+| Spreadsheets or tables | XLSX/CSV parser or spreadsheet tool | Tell the student table parsing is needed, then install/enable a spreadsheet parser if possible. If blocked, ask for CSV export or screenshots plus OCR. |
+| Archives | zip/7z extraction | Tell the student archive extraction is needed, then extract with available tools or install/enable an archive tool. If blocked, ask the student to unpack the archive. |
+| Web exam conventions | web search/browser | Use browser/search if available; if missing and the web signal matters, request the needed tool or ask the user to provide links/text. |
+| Persistent artifacts | filesystem write access | Treat this as blocked for official University Finals Sprint. Ask the user to switch to an installed/file-based agent or explicitly accept a non-supported manual run. |
 
-If a capability is missing, offer the student four choices: install/enable the relevant tool, provide a text export/transcription, skip that source, or continue with lower confidence using only readable materials.
+If a capability is missing and installable, the default action is: explain why it is needed, install/enable it, smoke-test it, and continue. Only fall back to text export/transcription, skip, or lower-confidence continuation when installation is unavailable, unsafe, denied, or fails.
 
 ## Quick Workflow
 
-1. **Check capabilities**: Identify which files can actually be read in the current platform and which require OCR, document parsing, transcription, web, or file-write tools. Start `logs/session_state.json`.
+1. **Check capabilities and install tools**: Identify which files can actually be read in the current platform and which require OCR, document parsing, transcription, web, archive, spreadsheet, or file-write tools. Create `logs/tool_readiness.md`, explain missing tools to the student, install/enable what the agent can safely install, smoke-test representative files, then start `logs/session_state.json`.
 2. **Initialize workspace**: If no organized course folder exists, run `scripts/init_qimo_workspace.py <target-folder>` or create the same structure manually. Accept raw unsorted course materials in `00_inbox/`.
 3. **Auto intake materials**: Classify files into PPT, textbook/reference, recordings/transcripts, homework, review重点, past exams, charts/tables/figures, and other. Assign priority tier S0-S6 and ask only about low-confidence or high-impact ambiguities.
 4. **Build source coverage ledger**: Create `logs/source_coverage.md` before synthesis. Mark every source complete, partial, unreadable, or skipped. Stop on unread S0/S1/S2 sources unless the user explicitly accepts lower confidence.
@@ -516,6 +555,7 @@ Every major output should include:
 - `User action`: the one action the student should take now.
 - `Purpose`: what this artifact is for.
 - `Inputs used`: source files and source locations. Use confidence only for unreadable or degraded sources; do not make confidence scoring the main artifact.
+- `Tool readiness`: available / installed / needs approval / blocked, with unreadable file types and install results when relevant.
 - `Source coverage gate result`: complete / partial with user-approved skips / blocked, with the high-priority unread list if any.
 - `Source priority used`: S0-S6 evidence tiers used and any conflicts resolved.
 - `Original-source verification`: original slide/page/transcript/question checked, secondary-only, conflicting, or unavailable.
@@ -589,6 +629,7 @@ course-folder/
   06_final/
   logs/
     session_state.json
+    tool_readiness.md
     source_coverage.md
     source_priority.md
     exam_rules.md
@@ -607,6 +648,7 @@ Use `assets/course-workspace-template/` as a reference template if copying manua
 ## Detailed References
 
 - Read `references/workflow.md` when planning or running the full 10-12 hour path.
+- Read `references/tool-readiness.md` when materials require PDF, PPT/PPTX, DOCX, OCR/vision, transcription, spreadsheet, archive, browser, or filesystem tooling that is missing or uncertain.
 - Read `references/auto-intake.md` when the user provides one unsorted course folder or multiple course folders.
 - Read `references/courseware-review.md` when planning or running original PPT/PDF/handout review.
 - Read `references/active-coaching.md` when user feedback, progress, or silence suggests a learning bottleneck.

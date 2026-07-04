@@ -1,6 +1,6 @@
 # Full Workflow Reference
 
-Use this when running the complete 10-12 hour Qimo Speedrun path.
+Use this when running the complete 10-12 hour University Finals Sprint path.
 
 ## Phase Order
 

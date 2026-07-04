@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.1 - 2026-07-04
+
+- Added a Tool Readiness and Auto-Install Gate so agents must explain missing document/OCR/transcription capabilities, install or enable tools when permitted, smoke-test extraction, and log remaining unreadable sources.
+- Added `references/tool-readiness.md` with preferred reading capabilities and fallbacks for PDF, PPT/PPTX, DOCX, homework photos, audio/video recordings, spreadsheets, archives, web pages, and local folders.
+- Updated the Capability Check, Quick Workflow, output standards, and workspace logs to include tool readiness and install results.
+- Renamed the primary skill to `university-finals-sprint` and removed older alias wrappers.
+- Rewrote `README.md` for public GitHub readers with use cases, workflow overview, Hermes usage, development history, design philosophy, privacy boundaries, and Hermes Edu Skills positioning.
+- Added bilingual GitHub-facing introduction and explicit author/maintainer-rights notice.
+
 ## 0.2.0 - 2026-07-04
 
 - Added a required Original Courseware Review Gate with a 60-80 minute primary review after the framework, a 30-40 minute targeted review after Exam 1, and a 20-30 minute final sweep.

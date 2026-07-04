@@ -45,7 +45,7 @@ After logging:
 
 ## Autonomous Evolution Levels
 
-Qimo Speedrun should evolve at three levels.
+University Finals Sprint should evolve at three levels.
 
 ### Level 1: Within The Current Study Block
 

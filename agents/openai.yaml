@@ -1,7 +1,7 @@
 interface:
-  display_name: "Qimo Speedrun"
+  display_name: "University Finals Sprint"
   short_description: "Finals review with courseware checks and coaching"
-  default_prompt: "Use $qimo-speedrun to turn my course materials into a source-grounded finals review sprint. Include guided courseware review and ask before creating scheduled check-ins."
+  default_prompt: "Use $university-finals-sprint to turn my course materials into a source-grounded finals review sprint. First check file-reading tools and install/enable missing PDF/PPT/OCR/transcription capabilities when permitted; include guided courseware review and ask before creating scheduled check-ins."
 
 policy:
   allow_implicit_invocation: true

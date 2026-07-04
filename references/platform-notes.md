@@ -1,6 +1,6 @@
 # Platform Notes
 
-Use this when adapting Qimo Speedrun to different agents.
+Use this when adapting University Finals Sprint to different agents.
 
 ## File-Based Agents
 
@@ -17,7 +17,7 @@ Prefer Hermes when scheduled tasks and message gateways are available. Load `ref
 
 ## Unsupported Web-Only Chat
 
-Ordinary web-only AI without skill installation, file access, and persistent state is not a supported Qimo Speedrun target. Do not add workflow burden for that mode.
+Ordinary web-only AI without skill installation, file access, and persistent state is not a supported University Finals Sprint target. Do not add workflow burden for that mode.
 
 If the user only has a knowledge-base product, use it as a retrieval or transcription helper behind an installed/file-based agent.
 
