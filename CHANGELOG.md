@@ -2,6 +2,7 @@
 
 ## 0.2.1 - 2026-07-04
 
+- Added `LICENSE` with CC BY-NC-SA 4.0 licensing and updated README/NOTICE license statements.
 - Added a Tool Readiness and Auto-Install Gate so agents must explain missing document/OCR/transcription capabilities, install or enable tools when permitted, smoke-test extraction, and log remaining unreadable sources.
 - Added `references/tool-readiness.md` with preferred reading capabilities and fallbacks for PDF, PPT/PPTX, DOCX, homework photos, audio/video recordings, spreadsheets, archives, web pages, and local folders.
 - Updated the Capability Check, Quick Workflow, output standards, and workspace logs to include tool readiness and install results.

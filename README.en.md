@@ -130,4 +130,6 @@ Issues, suggestions, usage reports, and pull requests are welcome. The original 
 
 ## License
 
-No open-source license has been granted yet. Unless a separate `LICENSE` file is added, all rights are reserved. See [NOTICE.md](NOTICE.md).
+This project is licensed under the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](LICENSE) license (CC BY-NC-SA 4.0).
+
+You may share and adapt this work for non-commercial purposes with attribution and the same license for adaptations. The original author/maintainer retains final control over the project name, core rules, version releases, merge decisions, external listings, and future modifications. See [NOTICE.md](NOTICE.md).
