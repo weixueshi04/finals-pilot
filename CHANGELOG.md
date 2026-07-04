@@ -6,8 +6,8 @@
 - Added `references/tool-readiness.md` with preferred reading capabilities and fallbacks for PDF, PPT/PPTX, DOCX, homework photos, audio/video recordings, spreadsheets, archives, web pages, and local folders.
 - Updated the Capability Check, Quick Workflow, output standards, and workspace logs to include tool readiness and install results.
 - Renamed the primary skill to `university-finals-sprint` and removed older alias wrappers.
-- Rewrote `README.md` for public GitHub readers with use cases, workflow overview, Hermes usage, development history, design philosophy, privacy boundaries, and Hermes Edu Skills positioning.
-- Added bilingual GitHub-facing introduction and explicit author/maintainer-rights notice.
+- Rewrote `README.md` as a normal Chinese GitHub project page and added `README.en.md` for English readers.
+- Added explicit author/maintainer-rights notice and removed draft-style license suggestions from the README.
 
 ## 0.2.0 - 2026-07-04
 
