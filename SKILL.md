@@ -3,7 +3,7 @@ name: finals-pilot
 description: Build a 10-12 hour finals sprint workflow from messy course materials. Use when a student needs a source-checked cram plan from PPTs, PDFs, textbooks, review recordings/transcripts, homework, past exams, figures, Chaoxing/Learning通 downloads, and notes; FinalsPilot enforces source coverage, tool readiness and auto-install, original-source verification, original courseware review, teacher-priority evidence, staged mock exams, active coaching, mistake review, recitation, final sprint sheets, correction-incident review, and scheduled follow-up tasks. Designed for installed/file-based agents such as Hermes, Codex, Claude Code, and OpenCode, especially Hermes-style agents with cron/message gateways.
 ---
 
-# FinalsPilot (v0.2.2)
+# FinalsPilot (v0.2.3)
 
 Use this skill to turn messy course materials into a compact, evidence-backed finals review path. The practical goal is 60+ as the floor and around 80 as the stretch target after 10-12 focused hours, assuming the materials contain enough exam signal.
 
@@ -13,7 +13,7 @@ When this skill is activated (loaded via `use_skill`), the assistant MUST immedi
 
 The guide must include:
 
-1. **Greeting + version**: State the skill name and version (e.g., "FinalsPilot v0.2.2 已激活").
+1. **Greeting + version**: State the skill name and version (e.g., "FinalsPilot v0.2.3 已激活").
 2. **What this skill does** (1-2 sentences): Turn your course materials into a structured 10-12 hour finals review path.
 3. **What the student needs to provide**: Course materials (PPT, textbook, recordings, homework, past exams, review notes) — can be unsorted, dumped into one folder or knowledge base.
    If the materials are still inside Chaoxing/Learning通, tell the student that the companion `chaoxing-materials` skill can download accessible chapter courseware into a local folder before FinalsPilot starts source coverage.

@@ -49,7 +49,7 @@ export function browserLaunchArgs({ remoteDebuggingPort, startUrl = "about:blank
     "--no-first-run"
   ];
 
-  if (process.env.CHAOXING_ALLOW_EXTENSIONS !== "1") {
+  if (process.env.CHAOXING_DISABLE_EXTENSIONS === "1" || process.env.CHAOXING_ALLOW_EXTENSIONS === "0") {
     args.push("--disable-extensions");
   }
 
@@ -67,12 +67,16 @@ export function browserLaunchArgs({ remoteDebuggingPort, startUrl = "about:blank
 
 export function browserRuntimeInfo() {
   const executablePath = findBrowserExecutable();
+  const extensions =
+    process.env.CHAOXING_DISABLE_EXTENSIONS === "1" || process.env.CHAOXING_ALLOW_EXTENSIONS === "0"
+      ? "disabled-by-env"
+      : "profile-default";
   return {
     executablePath,
     profileDir: path.relative(repoRoot, userDataDir) || userDataDir,
-    extensions: process.env.CHAOXING_ALLOW_EXTENSIONS === "1" ? "enabled-by-user" : "disabled",
+    extensions,
     browserChannel: process.env.CHAOXING_BROWSER_CHANNEL || "auto",
-    downloadEngine: "node-fetch-with-browser-cookies"
+    downloadEngine: process.env.CHAOXING_DOWNLOAD_ENGINE || "direct-fetch-with-browser-cookies"
   };
 }
 

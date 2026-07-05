@@ -117,8 +117,9 @@ npm.cmd run chaoxing:download-current -- --output "<course-materials-folder>"
 
 - 默认优先使用 Chrome，找不到 Chrome 时使用 Edge；也可以设置 `CHAOXING_BROWSER_CHANNEL=edge` 或 `CHAOXING_BROWSER_CHANNEL=chrome`。
 - 登录状态保存在 `automation/chaoxing/browser-profile`，不是你平时浏览器的个人资料。换浏览器或换 profile 后，可能需要重新登录一次。
-- 下载器使用脚本的 HTTP fetch + 浏览器 cookie，不依赖迅雷、IDM 或浏览器下载插件。
-- 浏览器扩展默认禁用；除非你显式设置 `CHAOXING_ALLOW_EXTENSIONS=1`，否则第三方插件不会参与下载。
+- 下载前必须让用户确认保存文件夹；没有 `--output` 或 `CHAOXING_OUTPUT_DIR` 时，下载脚本会停止。
+- 默认优先使用脚本的 HTTP fetch + 浏览器 cookie；如果用户已有迅雷、IDM 或浏览器下载插件，agent 可以说明利弊并征得同意后作为 fallback。
+- 浏览器扩展默认沿用自动化 profile 的配置；如果扩展干扰下载，可以设置 `CHAOXING_DISABLE_EXTENSIONS=1` 后重跑。
 
 默认下载结果：
 

@@ -1,15 +1,21 @@
 import fs from "node:fs";
 import path from "node:path";
 import { chromium } from "playwright-core";
-import { browserRuntimeInfo, downloadDir, saveJson } from "./browser-utils.mjs";
+import { browserRuntimeInfo, saveJson } from "./browser-utils.mjs";
 
 const port = Number(process.env.CHAOXING_DEBUG_PORT ?? 9222);
 const modeArgIndex = process.argv.indexOf("--mode");
 const outputArgIndex = process.argv.indexOf("--output");
 const downloadMode = process.env.CHAOXING_DOWNLOAD_MODE || (modeArgIndex >= 0 ? process.argv[modeArgIndex + 1] : "") || "pdf";
-const targetDownloadDir = path.resolve(
-  process.env.CHAOXING_OUTPUT_DIR || (outputArgIndex >= 0 ? process.argv[outputArgIndex + 1] : "") || downloadDir
-);
+const outputFromArg = outputArgIndex >= 0 ? process.argv[outputArgIndex + 1] : "";
+const outputFromEnv = process.env.CHAOXING_OUTPUT_DIR || "";
+
+if (!outputFromEnv && !outputFromArg) {
+  console.error("Missing output folder. Ask the user where to save course materials, then pass --output \"<course-materials-folder>\" or set CHAOXING_OUTPUT_DIR.");
+  process.exit(1);
+}
+
+const targetDownloadDir = path.resolve(outputFromEnv || outputFromArg);
 
 function safeFileName(value) {
   return String(value || "chaoxing-resource")

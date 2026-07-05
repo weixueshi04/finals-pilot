@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.3 - 2026-07-05
+
+- Changed Chaoxing extension handling from "disabled by default" to "follow the chosen automation profile by default"; agents may rerun with `CHAOXING_DISABLE_EXTENSIONS=1` only when extensions interfere.
+- Added a hard output-folder gate: agents must ask the student where to save materials, and `chaoxing:download-current` now stops when neither `--output` nor `CHAOXING_OUTPUT_DIR` is provided.
+- Clarified that the agent may choose direct fetch, browser-native download, or an already configured user-approved helper based on the student's environment, while still verifying final files before adding them to the manifest.
+
 ## 0.2.2 - 2026-07-05
 
 - Added an explicit Chaoxing browser/session policy: report the selected browser executable, channel, automation profile, extension state, and download engine before running.

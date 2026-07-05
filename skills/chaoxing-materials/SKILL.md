@@ -24,7 +24,7 @@ Do not use it when the student already has a complete local folder of course mat
 - Do not ask for passwords. Open the browser and let the student log in manually when needed.
 - Reuse the local browser profile at `automation/chaoxing/browser-profile` when available.
 - Do not rely on the student's everyday Chrome/Edge profile. The automation profile is separate so login cookies and course artifacts stay local to this workflow.
-- Do not install or depend on third-party browser extensions, download accelerators, or external download managers.
+- Do not install third-party browser extensions, download accelerators, or external download managers without explicit user approval.
 - Do not bypass access controls, paywalls, CAPTCHA, school SSO restrictions, or account security prompts.
 - Do not commit downloaded course materials, login profiles, extracted text, or generated course artifacts.
 
@@ -37,8 +37,8 @@ Browser:
 - Executable: <Chrome/Edge path>
 - Channel: auto / chrome / edge / explicit path
 - Profile: automation/chaoxing/browser-profile or CHAOXING_USER_DATA_DIR
-- Extensions: disabled by default
-- Download engine: node-fetch-with-browser-cookies
+- Extensions: profile default / disabled-by-env / user-approved helper
+- Download engine: direct fetch / browser native download / user-approved helper
 ```
 
 Rules:
@@ -49,15 +49,16 @@ Rules:
 - Keep using the same browser executable and same automation profile during one course run.
 - Run `npm.cmd run chaoxing:login` as a session check. If the session is already valid, do not ask the student to log in again.
 - If Chaoxing asks for login twice, explain the likely cause: expired SSO session, school SSO domain requiring a separate confirmation, changed browser/profile, cleared cookies, or Chaoxing invalidating the previous session. Do not claim the profile was preserved unless the session check proves it.
-- Browser extensions are disabled by default. Enable them only if the user explicitly sets `CHAOXING_ALLOW_EXTENSIONS=1`; this is not recommended for normal downloading.
+- Browser extensions follow the chosen automation profile by default. If an extension interferes, ask before rerunning with `CHAOXING_DISABLE_EXTENSIONS=1`.
 
 ## Download Engine Policy
 
-- The downloader should fetch files directly from Chaoxing/Chaoxing CDN URLs using the logged-in browser cookies.
-- Do not click browser download prompts as the primary route unless the direct fetch route fails and the user approves a fallback.
-- Do not use Xunlei, IDM, browser download plugins, cloud-drive helper extensions, or any third-party downloader as part of the skill.
-- If a third-party extension appears in the browser, ignore it. If it interferes, close the browser and rerun with extensions disabled.
-- Verify downloaded PDFs by checking the `%PDF` file header. If a file is HTML, JSON, video, or an error page, record it as failed/partial instead of adding it to the manifest.
+- Choose the download route from the user's actual environment and state the choice before downloading.
+- Preferred portable route: direct fetch from Chaoxing/Chaoxing CDN URLs using the logged-in browser cookies.
+- Browser native download is an acceptable fallback when direct fetch fails or when Chaoxing only exposes a normal download link.
+- Existing third-party helpers such as Xunlei, IDM, browser download plugins, or cloud-drive helper extensions may be used only when the user already has them configured, the agent explains the tradeoff, and the user approves that route for the current run.
+- Never silently install or enable a third-party helper.
+- Regardless of route, verify downloaded PDFs by checking the `%PDF` file header. If a file is HTML, JSON, video, or an error page, record it as failed/partial instead of adding it to the manifest.
 
 ## Format Policy
 
@@ -71,13 +72,17 @@ Default to `pdf` for PPT/PPTX/DOC/DOCX/XLS/XLSX resources:
 
 ## Required Student Setup
 
-Before downloading, tell the student to create one course-material folder outside the Git repository. Use a generic placeholder in public instructions and ask the student to provide their own local path during an actual run:
+Before downloading, ask the student where the course materials should be saved. This is a hard gate: do not start downloading until the user has approved a folder path.
+
+Use a generic placeholder in public instructions and ask the student to provide their own local path during an actual run:
 
 ```text
 <course-materials-folder>
 ```
 
 Use that folder as the `--output` path or `CHAOXING_OUTPUT_DIR`.
+
+If the user does not provide a folder, stop and ask for one. Do not silently fall back to `automation/chaoxing/downloads` or another default folder.
 
 Recommended folder layout:
 
@@ -122,7 +127,7 @@ Manifest privacy rules:
 
 ## Workflow
 
-1. Confirm the student has created or approved an output folder.
+1. Confirm the student has created or approved an output folder. Show the exact folder path back to the student before downloading.
 2. Install local automation dependencies if missing:
 
    ```powershell
@@ -163,6 +168,8 @@ Manifest privacy rules:
 
    This defaults to PDF-only. Use `npm.cmd run chaoxing:download-source` for source files, `npm.cmd run chaoxing:download-media` for video/audio, and `npm.cmd run chaoxing:download-all` only when the student explicitly wants everything.
 
+   If `--output` or `CHAOXING_OUTPUT_DIR` is missing, the script must stop and ask for a folder instead of using an implicit default.
+
 8. Verify each downloaded file:
 
    - Check file size is nonzero.
@@ -188,7 +195,7 @@ Manifest privacy rules:
 
 ## Implementation Notes
 
-- The robust route is not the visible Chaoxing download button and not a third-party download manager.
+- The robust route is usually the resource metadata/status endpoint plus verified direct fetch, but the agent may choose browser-native or user-approved helper downloads when the page structure requires it.
 - First locate resource iframes inside `.ans-attach-ct` or the knowledge-card frame.
 - Extract `objectid` from iframe attributes or URLs.
 - Resolve resource metadata through:
@@ -239,4 +246,4 @@ Recommended FinalsPilot source-coverage mapping:
 - If no resource objectid is found, run `npm.cmd run chaoxing:probe-assets` and inspect iframe/card metadata before guessing.
 - If the PDF conversion is missing or broken, use `--mode source` for the original file, then let FinalsPilot's document tools convert or read it.
 - If the resource is video/audio and the student needs it for review, use `--mode media`; FinalsPilot must still transcribe it before treating it as teacher evidence.
-- If a third-party extension or download helper opens, close or ignore it and rerun with extensions disabled. Do not make the skill depend on that extension.
+- If a third-party extension or download helper opens, explain what happened and ask whether to use it, ignore it, or rerun with `CHAOXING_DISABLE_EXTENSIONS=1`.
