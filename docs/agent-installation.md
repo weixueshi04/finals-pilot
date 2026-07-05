@@ -105,6 +105,19 @@ npm.cmd run chaoxing:open-section -- <course keyword> <chapter keyword>
 npm.cmd run chaoxing:download-current -- --output "<course-materials-folder>"
 ```
 
+Browser/session controls:
+
+```powershell
+$env:CHAOXING_BROWSER_CHANNEL="edge"      # prefer Edge
+$env:CHAOXING_BROWSER_CHANNEL="chrome"    # prefer Chrome
+$env:CHAOXING_BROWSER="C:\Path\To\browser.exe"
+$env:CHAOXING_USER_DATA_DIR="D:\private\chaoxing-browser-profile"
+```
+
+The default automation profile is `automation/chaoxing/browser-profile`. It is separate from the user's normal browser profile, so the first run may require login even if the user is already logged in through their everyday browser. Keep the same browser and profile during one course run to preserve the session.
+
+The downloader uses direct HTTP fetch with browser cookies and verifies PDF headers. It does not depend on Xunlei, IDM, browser download extensions, or third-party download managers. Extensions are disabled by default; only set `CHAOXING_ALLOW_EXTENSIONS=1` if the user explicitly wants that risk.
+
 The output folder should live outside the Git repository. By default the downloader writes AI-readable PDFs into `01_pdf_for_ai/` and writes `manifest/materials-manifest.md/json`. The manifest uses relative paths and does not store absolute local paths, signed download URLs, cookies, or account identifiers.
 
 After that, start FinalsPilot with the downloaded folder:

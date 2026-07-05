@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.2 - 2026-07-05
+
+- Added an explicit Chaoxing browser/session policy: report the selected browser executable, channel, automation profile, extension state, and download engine before running.
+- Added browser selection controls through `CHAOXING_BROWSER_CHANNEL`, `CHAOXING_BROWSER`, and `CHAOXING_USER_DATA_DIR` so users can keep runs on Chrome or Edge consistently.
+- Changed Chaoxing automation to disable browser extensions by default and document that third-party download managers such as Xunlei/IDM are not part of the skill.
+- Improved login handling so `chaoxing:login` first checks whether the existing automation profile is already logged in before asking the student to authenticate again.
+- Added PDF header validation to the current-section downloader so HTML/error pages are not written into the manifest as successful PDFs.
+
 ## 0.2.1 - 2026-07-04
 
 - Added the companion `chaoxing-materials` skill for downloading accessible Chaoxing/Learning通 chapter resources through browser login reuse, `objectid` status resolution, PDF-first download defaults, optional source/media download modes, output-folder naming, and manifest generation.

@@ -1,4 +1,5 @@
 import {
+  browserRuntimeInfo,
   getMainPage,
   launchChaoxingContext,
   looksLoggedIn,
@@ -30,6 +31,7 @@ function dedupeCourses(items) {
 const context = await launchChaoxingContext();
 const page = await getMainPage(context);
 
+console.log("Browser runtime:", JSON.stringify(browserRuntimeInfo(), null, 2));
 await page.goto(HOME_URL, { waitUntil: "domcontentloaded", timeout: 60_000 });
 await page.waitForTimeout(3000);
 
@@ -41,9 +43,10 @@ if (!(await looksLoggedIn(page))) {
     await saveJson("course-scan-login-blocked.json", {
       url: page.url(),
       checkedAt: new Date().toISOString(),
+      browser: browserRuntimeInfo(),
       pageTextPreview: text.slice(0, 1000)
     });
-    console.log("Login was not confirmed before timeout. Re-run this command after signing in.");
+    console.log("Login was not confirmed before timeout. Re-run npm.cmd run chaoxing:login after signing in.");
     await context.close();
     process.exit(2);
   }

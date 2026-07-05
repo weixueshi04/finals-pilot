@@ -7,7 +7,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export const repoRoot = path.resolve(__dirname, "..", "..");
 export const runRoot = path.join(repoRoot, "automation", "chaoxing");
-export const userDataDir = path.join(runRoot, "browser-profile");
+export const userDataDir = path.resolve(process.env.CHAOXING_USER_DATA_DIR || path.join(runRoot, "browser-profile"));
 export const downloadDir = path.join(runRoot, "downloads");
 export const outputDir = path.join(runRoot, "outputs");
 
@@ -18,13 +18,21 @@ export function ensureRunDirs() {
 }
 
 export function findBrowserExecutable() {
-  const candidates = [
-    process.env.CHAOXING_BROWSER,
+  const chromeCandidates = [
     "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-    "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+    "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
+  ];
+  const edgeCandidates = [
     "C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe",
     "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe"
-  ].filter(Boolean);
+  ];
+
+  const channel = String(process.env.CHAOXING_BROWSER_CHANNEL || "").toLowerCase();
+  let channelCandidates = [...chromeCandidates, ...edgeCandidates];
+  if (["edge", "msedge"].includes(channel)) channelCandidates = [...edgeCandidates, ...chromeCandidates];
+  if (["chrome", "google-chrome"].includes(channel)) channelCandidates = [...chromeCandidates, ...edgeCandidates];
+
+  const candidates = [process.env.CHAOXING_BROWSER, ...channelCandidates].filter(Boolean);
 
   const found = candidates.find((candidate) => fs.existsSync(candidate));
   if (!found) {
@@ -35,6 +43,39 @@ export function findBrowserExecutable() {
   return found;
 }
 
+export function browserLaunchArgs({ remoteDebuggingPort, startUrl = "about:blank", includeUserDataDir = false } = {}) {
+  const args = [
+    "--no-default-browser-check",
+    "--no-first-run"
+  ];
+
+  if (process.env.CHAOXING_ALLOW_EXTENSIONS !== "1") {
+    args.push("--disable-extensions");
+  }
+
+  if (remoteDebuggingPort) {
+    args.push(`--remote-debugging-port=${remoteDebuggingPort}`);
+  }
+
+  if (includeUserDataDir) {
+    args.push(`--user-data-dir=${userDataDir}`);
+    args.push("--new-window");
+    args.push(startUrl);
+  }
+  return args;
+}
+
+export function browserRuntimeInfo() {
+  const executablePath = findBrowserExecutable();
+  return {
+    executablePath,
+    profileDir: path.relative(repoRoot, userDataDir) || userDataDir,
+    extensions: process.env.CHAOXING_ALLOW_EXTENSIONS === "1" ? "enabled-by-user" : "disabled",
+    browserChannel: process.env.CHAOXING_BROWSER_CHANNEL || "auto",
+    downloadEngine: "node-fetch-with-browser-cookies"
+  };
+}
+
 export async function launchChaoxingContext() {
   ensureRunDirs();
   return chromium.launchPersistentContext(userDataDir, {
@@ -42,6 +83,7 @@ export async function launchChaoxingContext() {
     headless: false,
     acceptDownloads: true,
     downloadsPath: downloadDir,
+    args: browserLaunchArgs(),
     viewport: { width: 1440, height: 920 }
   });
 }

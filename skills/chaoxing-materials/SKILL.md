@@ -23,8 +23,41 @@ Do not use it when the student already has a complete local folder of course mat
 - Only work with materials the student can access through their own logged-in course page.
 - Do not ask for passwords. Open the browser and let the student log in manually when needed.
 - Reuse the local browser profile at `automation/chaoxing/browser-profile` when available.
+- Do not rely on the student's everyday Chrome/Edge profile. The automation profile is separate so login cookies and course artifacts stay local to this workflow.
+- Do not install or depend on third-party browser extensions, download accelerators, or external download managers.
 - Do not bypass access controls, paywalls, CAPTCHA, school SSO restrictions, or account security prompts.
 - Do not commit downloaded course materials, login profiles, extracted text, or generated course artifacts.
+
+## Browser And Session Policy
+
+Before opening Chaoxing, state the browser/runtime choices clearly:
+
+```text
+Browser:
+- Executable: <Chrome/Edge path>
+- Channel: auto / chrome / edge / explicit path
+- Profile: automation/chaoxing/browser-profile or CHAOXING_USER_DATA_DIR
+- Extensions: disabled by default
+- Download engine: node-fetch-with-browser-cookies
+```
+
+Rules:
+
+- Chrome and Edge are both supported because both expose Chromium automation. There is no courseware-download advantage to either browser.
+- The default search order is Chrome first, then Edge. Use `CHAOXING_BROWSER_CHANNEL=edge` to prefer Edge, `CHAOXING_BROWSER_CHANNEL=chrome` to prefer Chrome, or `CHAOXING_BROWSER=<absolute-browser-exe>` to pin a specific browser.
+- Login persistence is tied to the automation profile, not the user's normal browser profile. If the browser executable or `CHAOXING_USER_DATA_DIR` changes, the student may need to log in once again.
+- Keep using the same browser executable and same automation profile during one course run.
+- Run `npm.cmd run chaoxing:login` as a session check. If the session is already valid, do not ask the student to log in again.
+- If Chaoxing asks for login twice, explain the likely cause: expired SSO session, school SSO domain requiring a separate confirmation, changed browser/profile, cleared cookies, or Chaoxing invalidating the previous session. Do not claim the profile was preserved unless the session check proves it.
+- Browser extensions are disabled by default. Enable them only if the user explicitly sets `CHAOXING_ALLOW_EXTENSIONS=1`; this is not recommended for normal downloading.
+
+## Download Engine Policy
+
+- The downloader should fetch files directly from Chaoxing/Chaoxing CDN URLs using the logged-in browser cookies.
+- Do not click browser download prompts as the primary route unless the direct fetch route fails and the user approves a fallback.
+- Do not use Xunlei, IDM, browser download plugins, cloud-drive helper extensions, or any third-party downloader as part of the skill.
+- If a third-party extension appears in the browser, ignore it. If it interferes, close the browser and rerun with extensions disabled.
+- Verify downloaded PDFs by checking the `%PDF` file header. If a file is HTML, JSON, video, or an error page, record it as failed/partial instead of adding it to the manifest.
 
 ## Format Policy
 
@@ -96,11 +129,13 @@ Manifest privacy rules:
    npm.cmd install
    ```
 
-3. Open or refresh the login session:
+3. State the browser/profile/download-engine runtime and check the login session:
 
    ```powershell
    npm.cmd run chaoxing:login
    ```
+
+   If the existing automation profile is still logged in, continue without asking the student to log in manually.
 
 4. Scan course list:
 
@@ -153,7 +188,7 @@ Manifest privacy rules:
 
 ## Implementation Notes
 
-- The robust route is not the visible Chaoxing download button.
+- The robust route is not the visible Chaoxing download button and not a third-party download manager.
 - First locate resource iframes inside `.ans-attach-ct` or the knowledge-card frame.
 - Extract `objectid` from iframe attributes or URLs.
 - Resolve resource metadata through:
@@ -198,7 +233,10 @@ Recommended FinalsPilot source-coverage mapping:
 ## Failure Handling
 
 - If login is expired, rerun `npm.cmd run chaoxing:login` and let the student authenticate manually.
+- If login is requested again after a previous successful login, check whether the browser executable, `CHAOXING_USER_DATA_DIR`, school SSO domain, or cookie state changed before asking the student to retry.
+- If the user normally uses Edge but automation used Chrome, either continue with the isolated Chrome profile after one login, or rerun with `CHAOXING_BROWSER_CHANNEL=edge` so future sessions stay in Edge.
 - If course or chapter search returns the wrong page, ask for narrower course/chapter keywords.
 - If no resource objectid is found, run `npm.cmd run chaoxing:probe-assets` and inspect iframe/card metadata before guessing.
 - If the PDF conversion is missing or broken, use `--mode source` for the original file, then let FinalsPilot's document tools convert or read it.
 - If the resource is video/audio and the student needs it for review, use `--mode media`; FinalsPilot must still transcribe it before treating it as teacher evidence.
+- If a third-party extension or download helper opens, close or ignore it and rerun with extensions disabled. Do not make the skill depend on that extension.

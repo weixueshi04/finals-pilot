@@ -113,6 +113,13 @@ npm.cmd run chaoxing:open-section -- <course keyword> <chapter keyword>
 npm.cmd run chaoxing:download-current -- --output "<course-materials-folder>"
 ```
 
+Browser and login notes:
+
+- Chrome is preferred by default, then Edge. Set `CHAOXING_BROWSER_CHANNEL=edge` or `CHAOXING_BROWSER_CHANNEL=chrome` to choose explicitly.
+- Login state is stored in `automation/chaoxing/browser-profile`, not in the student's normal browser profile. Changing browser or profile can require one more login.
+- Downloads use the script's HTTP fetch with browser cookies. Xunlei, IDM, browser download plugins, and third-party download managers are not required.
+- Browser extensions are disabled by default unless `CHAOXING_ALLOW_EXTENSIONS=1` is explicitly set.
+
 Default output:
 
 ```text

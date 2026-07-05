@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { chromium } from "playwright-core";
-import { downloadDir, saveJson } from "./browser-utils.mjs";
+import { browserRuntimeInfo, downloadDir, saveJson } from "./browser-utils.mjs";
 
 const port = Number(process.env.CHAOXING_DEBUG_PORT ?? 9222);
 const modeArgIndex = process.argv.indexOf("--mode");
@@ -270,6 +270,9 @@ async function downloadFile(context, page, choice, objectid) {
 
   const target = uniquePath(kindDir, finalName);
   const buffer = Buffer.from(await response.arrayBuffer());
+  if (choice.kind === "pdf" && buffer.slice(0, 4).toString("utf8") !== "%PDF") {
+    throw new Error(`Downloaded content is not a PDF (${buffer.length} bytes).`);
+  }
   fs.writeFileSync(target, buffer);
 
   const record = {
@@ -352,6 +355,8 @@ async function main() {
     checkedAt: new Date().toISOString(),
     downloadMode,
     outputDir: targetDownloadDir,
+    browser: browserRuntimeInfo(),
+    downloadEngine: "node-fetch-with-browser-cookies",
     candidateCount: candidates.length,
     candidates,
     statuses,

@@ -3,12 +3,13 @@ import path from "node:path";
 import { spawn } from "node:child_process";
 import { chromium } from "playwright-core";
 import {
+  browserLaunchArgs,
+  browserRuntimeInfo,
   findBrowserExecutable,
   outputDir,
   pageText,
   repoRoot,
   saveJson,
-  userDataDir,
   waitForLogin
 } from "./browser-utils.mjs";
 
@@ -56,12 +57,7 @@ async function waitForCdp() {
 
 function startBrowser() {
   const browserPath = findBrowserExecutable();
-  const args = [
-    `--remote-debugging-port=${port}`,
-    `--user-data-dir=${userDataDir}`,
-    "--new-window",
-    "about:blank"
-  ];
+  const args = browserLaunchArgs({ remoteDebuggingPort: port, includeUserDataDir: true });
 
   const child = spawn(browserPath, args, {
     cwd: repoRoot,
@@ -111,6 +107,7 @@ async function collectTextPreview(page) {
 
 const course = loadCourseUrl(courseKeyword);
 
+console.log("Browser runtime:", JSON.stringify(browserRuntimeInfo(), null, 2));
 startBrowser();
 await waitForCdp();
 
@@ -130,6 +127,7 @@ if (/passport|login|sso|auth/i.test(page.url())) {
       course,
       currentUrl: page.url(),
       checkedAt: new Date().toISOString(),
+      browser: browserRuntimeInfo(),
       frames: await collectTextPreview(page)
     });
     process.exit(2);
